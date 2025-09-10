@@ -1,2 +1,4 @@
 /node_modules/
 /dist/
+/messages.db
+/package-lock.json
