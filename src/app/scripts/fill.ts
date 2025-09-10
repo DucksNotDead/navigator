@@ -1,7 +1,7 @@
-import {emulate} from "./emulator";
-import {parse, sources} from "./parser";
-import {send} from "./bot";
-import {Message} from "./bot/model";
+import {emulate} from "../../emulator";
+import {parse, sources} from "../../parser";
+import {send} from "../../bot";
+import {Message} from "../../bot/model";
 
 interface Item {
 	msg: Omit<Message, "telegramID">,

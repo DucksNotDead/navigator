@@ -4,9 +4,10 @@
   "main": "dist/index.js",
   "scripts": {
     "rebuild": "rm -r -f dist && npx tsc",
-    "start": "npm run rebuild && node dist/index.js",
-    "clear": "npm run rebuild && node dist/clear.js",
-    "fill": "npm run rebuild && node dist/fill.js"
+    "start": "npm run rebuild && pm2 start ecosystem.config.js",
+    "clear": "npm run rebuild && node dist/app/scripts/clear.js",
+    "fill": "npm run rebuild && node dist/app/scripts/fill.js",
+    "scheduler-test": "npm run rebuild && node dist/app/scripts/schedule-test.js"
   },
   "keywords": [],
   "author": "",
@@ -14,8 +15,10 @@
   "description": "",
   "dependencies": {
     "express": "^5.1.0",
+    "node-cron": "^4.2.1",
     "node-html-parser": "^7.0.1",
     "node-telegram-bot-api": "^0.66.0",
+    "pm2": "^6.0.10",
     "sqlite": "^5.1.1",
     "sqlite3": "^5.1.7"
   },

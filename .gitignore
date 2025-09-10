@@ -3,3 +3,5 @@
 /messages.db
 /package-lock.json
 /.idea
+/err.log
+/out.log

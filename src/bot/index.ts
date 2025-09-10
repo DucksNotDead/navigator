@@ -5,10 +5,20 @@ import {appStorage} from "../storage";
 const API_KEY = "8188368688:AAGIwnr6_DNrLpsX3VzQ--6AWqKErdl6nrs"
 const CHANNEL_ID = -1003019434137
 
-const bot = new Bot(API_KEY, { polling: true })
+async function getBot(): Promise<Bot|null> {
+	try {
+		return new Bot(API_KEY, { polling: true })
+	} catch (e) {
+		return null;
+	}
+}
 
 export async function send(msg: Omit<Message, 'telegramID'>, mediaURL: string) {
 	if (await appStorage.findMessage(msg.id)) return;
+
+	const bot = await getBot();
+	if (!bot) return;
+
 	const message = await bot.sendPhoto(
 		CHANNEL_ID,
 		mediaURL,
@@ -19,6 +29,8 @@ export async function send(msg: Omit<Message, 'telegramID'>, mediaURL: string) {
 }
 
 export async function clearChat(ids: number[]) {
+	const bot = await getBot();
+	if (!bot) return;
 	for (const id of ids) {
 		await bot.deleteMessage(CHANNEL_ID, id)
 	}

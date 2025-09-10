@@ -1,4 +1,4 @@
-import {mexMessageContentLength} from "../shared/const";
+import { appConfig } from "../app/config";
 
 export function snake(...args: string[]): string {
 	return args.map(str => str.replaceAll(' ', '_')).join('_');
@@ -61,9 +61,9 @@ export function text(titleLength: number, textBlocks: string[]): string {
 	for (const textBlockIndex in textBlocks) {
 		const textBlock = textBlocks[textBlockIndex]!;
 		totalLength += textBlock.length
-		if (totalLength > mexMessageContentLength) {
+		if (totalLength > appConfig.mexMessageContentLength) {
 			if (Number(textBlockIndex) === 0) {
-				result += cut(textBlock, totalLength - mexMessageContentLength)
+				result += cut(textBlock, totalLength - appConfig.mexMessageContentLength)
 			}
 			continue;
 		}
