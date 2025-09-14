@@ -2,7 +2,7 @@ import sqlite3 from "sqlite3";
 import {Database, open} from "sqlite";
 import {Message} from "../bot/model";
 
-class StorageClass {
+class StorageLike {
 	private db:  Database<sqlite3.Database, sqlite3.Statement>|null = null
 	private readonly tableName: string = "messages";
 
@@ -24,6 +24,11 @@ class StorageClass {
 			`SELECT * FROM ${this.tableName} WHERE id LIKE ?`,
 			[`%${id}%`]
 		);
+	}
+
+	async findAll(): Promise<Message[]> {
+		await this.checkDb()
+		return this.db?.all(`SELECT * FROM ${this.tableName}`) ?? [];
 	}
 
 	async clearTable(): Promise<number[]> {
@@ -56,11 +61,6 @@ class StorageClass {
 		if (!this.db) await this.initDb()
 	}
 
-	private async findAll(): Promise<Message[]> {
-		await this.checkDb()
-		return this.db?.all(`SELECT * FROM ${this.tableName}`) ?? [];
-	}
-
 	private async removeMessage(id: string) {
 		await this.checkDb()
 		await this.db?.run(
@@ -70,4 +70,4 @@ class StorageClass {
 	}
 }
 
-export const appStorage = new StorageClass();
+export const appStorage = new StorageLike();

@@ -49,7 +49,15 @@ emulate(async (emulateCallbackArguments) => {
 		}
 	}
 	console.log('shuffle...')
-	for (const item of shuffle(collections)) {
+	const shuffled = shuffle(collections)
+	for (const itemIndex in shuffled) {
+		const item = shuffled[itemIndex]
+		if (itemIndex && (Number(itemIndex) % 19 === 0)) {
+			await new Promise(resolve => setTimeout(resolve, 1000))
+		}
+		if (!item) {
+			continue;
+		}
 		await send(item.msg, item.mediaURL)
 		console.log(item.msg.id, 'was send')
 	}

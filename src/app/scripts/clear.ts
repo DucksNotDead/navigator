@@ -1,6 +1,7 @@
-import {clearChat} from "../../bot";
 import {appStorage} from "../../storage";
+import {clearChat} from "../../bot";
 
 (async () => {
-	await clearChat(await appStorage.clearTable())
+	const all = await appStorage.findAll()
+	await clearChat(all.map(m => m.telegramID))
 })()

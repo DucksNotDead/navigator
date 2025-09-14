@@ -17,11 +17,14 @@ export interface ParserSourceBase {
 	maxItems?: number;
 }
 
+export type ParsePageFunction = () => Promise<HTMLElement>;
+
 export interface ParserFunctionArguments extends Omit<EmulateCallbackArguments, 'getContent'> {
 	page: Page;
 	source: ParserSourceBase;
 	html: HTMLElement;
 	getContent: (path: string) => Promise<HTMLElement>;
+	parsePage: ParsePageFunction;
 	isFillMode: boolean;
 }
 

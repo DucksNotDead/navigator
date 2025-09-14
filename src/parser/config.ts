@@ -2,9 +2,11 @@ import {ParserSource} from "./model";
 import {rnfFn} from "./functions/rnf";
 import {Tags} from "../shared/tags";
 import {fiopFn} from "./functions/fiop";
+import {atrNewsFn} from "./functions/atr/atr-news";
 
 export const sources: ParserSource[] = [
 	{
+		disabled: true,
 		name: 'Российский научный фонд',
 		baseURL: 'https://rscf.ru',
 		idPrefix: 'РНФ',
@@ -14,6 +16,7 @@ export const sources: ParserSource[] = [
 		logo: 'rnf-logo.png',
 	},
 	{
+		disabled: true,
 		name: 'Фонд инфраструктурных и образовательных программ',
 		baseURL: 'https://fiop.site',
 		idPrefix: 'ФИОП',
@@ -22,5 +25,15 @@ export const sources: ParserSource[] = [
 			{ path: '/press-tsentr', fn: fiopFn, tag: Tags.News }
 		],
 		logo: 'fiop-logo.svg',
+	},
+	{
+		name: 'АНО Агентство по технологическому развитию',
+		baseURL: 'https://atr.gov.ru',
+		idPrefix: 'АТР',
+		routes: [
+			// { path: '/', fn: atrContestsFn, tag: Tags.Grants, idPrefix: Tags.Grants },
+			{ path: '/news', fn: atrNewsFn, tag: Tags.News, idPrefix: Tags.News },
+		],
+		logo: 'atr-logo.png',
 	},
 ]

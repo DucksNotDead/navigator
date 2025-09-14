@@ -73,6 +73,35 @@ export function text(titleLength: number, textBlocks: string[]): string {
 	return result;
 }
 
-export async function loginInLeaderID() {
+export function currentDate(): string {
+	const now = new Date();
 
+	const day = String(now.getDate()).padStart(2, "0");
+	const month = String(now.getMonth() + 1).padStart(2, "0"); // месяцы с 0
+	const year = now.getFullYear();
+
+	return `${day}.${month}.${year}`;
+}
+
+export function isNotFutureDate(dateStr: string): boolean {
+	const [day, month, year] = (dateStr.split(".").map(val => Number(val)) as [number, number, number]);
+	const inputDate = new Date(year, month - 1, day);
+
+	const today = new Date();
+	today.setHours(0, 0, 0, 0);
+
+	// true → дата не в будущем
+	return inputDate <= today;
+}
+
+export function lowerFirstIfNotUppercase(str: string): string {
+	const firstWord = str.split(/\s+/)[0]!;
+
+	const isUppercase = firstWord === firstWord.toUpperCase();
+
+	if (isUppercase) {
+		return str;
+	}
+
+	return str.charAt(0).toLowerCase() + str.slice(1);
 }
