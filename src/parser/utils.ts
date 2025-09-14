@@ -50,7 +50,7 @@ export function normalize(str: string): string {
 		.replace(/&nbsp;/g, ' ');
 }
 
-function cut(str: string, index: number): string {
+export function cut(str: string, index: number): string {
 	return str.slice(0, index) + '...\n'
 }
 
@@ -71,4 +71,8 @@ export function text(titleLength: number, textBlocks: string[]): string {
 	}
 
 	return result;
+}
+
+export async function loginInLeaderID() {
+
 }

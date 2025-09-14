@@ -28,7 +28,7 @@ function shuffle(collections: Collections): Item[] {
 	return result
 }
 
-emulate(async getContent => {
+emulate(async (emulateCallbackArguments) => {
 	console.log('start fill')
 	const collections: Collections = []
 	for (const source of sources) {
@@ -37,7 +37,7 @@ emulate(async getContent => {
 		for (const route of source.routes) {
 			collections[index] = []
 			console.log('running', source.baseURL+route.path+'...')
-			const results = await parse({ getContent, source, route, isFillMode: true });
+			const results = await parse({ ...emulateCallbackArguments, source, route, isFillMode: true });
 			for (const result of results) {
 				collections[index]?.push({
 					msg: result,

@@ -1,4 +1,6 @@
 import {HTMLElement} from "node-html-parser";
+import {EmulateCallbackArguments} from "../emulator/model";
+import {Page} from "@playwright/test";
 
 export interface ParserResult {
 	id: string;
@@ -15,7 +17,8 @@ export interface ParserSourceBase {
 	maxItems?: number;
 }
 
-export interface ParserFunctionArguments {
+export interface ParserFunctionArguments extends Omit<EmulateCallbackArguments, 'getContent'> {
+	page: Page;
 	source: ParserSourceBase;
 	html: HTMLElement;
 	getContent: (path: string) => Promise<HTMLElement>;
@@ -37,7 +40,7 @@ export interface ParserSourceRoute {
 	idPrefix?: string | undefined;
 }
 
-export interface ParserSource extends ParserSourceBase{
+export interface ParserSource extends ParserSourceBase {
 	routes: ParserSourceRoute[];
 }
 

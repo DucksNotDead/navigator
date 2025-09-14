@@ -1,7 +1,8 @@
 import {chromium} from "playwright";
-import {EmulateCallback} from "./model";
+import {EmulateCallback, EmulateCallbackArguments, EmulatorInstance} from "./model";
+import {beforeRun} from "./beforeRun";
 
-async function createBrowserPage() {
+async function createBrowserPage(): Promise<EmulatorInstance> {
 	const browser = await chromium.launch();
 
 	const context = await browser.newContext({
@@ -15,10 +16,28 @@ async function createBrowserPage() {
 
 export function emulate(callback: EmulateCallback) {
 	createBrowserPage().then(async ({ page, browser }) => {
-		await callback(async (path) => {
-			await page.goto(path, { waitUntil: 'domcontentloaded', timeout: 60000 });
-			return await page.content();
-		})
+		const functions: EmulateCallbackArguments = {
+			getContent: async (path) => {
+				await page.goto(path, { waitUntil: 'domcontentloaded', timeout: 60000 });
+				return await page.content();
+			},
+			download: async (selector) => {
+				const [ download ] = await Promise.all([
+					page.waitForEvent("download"),
+					page.locator(selector).click(),
+				]);
+
+				return {
+					url: download.url(),
+					filename: download.suggestedFilename(),
+				}
+			},
+			page,
+		}
+
+		await beforeRun({ browser, ...functions });
+
+		await callback(functions)
 
 		await browser.close();
 	})

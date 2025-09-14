@@ -9,7 +9,7 @@ interface Args extends Omit<ParserFunctionArguments, 'html'|'getContent'> {
 	getContent: GetContentFunction;
 }
 
-export async function parse({ source, getContent: globalGetContent, route, isFillMode }: Args): Promise<ParserResult[]> {
+export async function parse({ source, getContent: globalGetContent, route, isFillMode, ...other }: Args): Promise<ParserResult[]> {
 	const getContent = async (path: string) => {
 		const content = await globalGetContent(path)
 		return htmlParser.parse(content)
@@ -18,7 +18,8 @@ export async function parse({ source, getContent: globalGetContent, route, isFil
 		html: await getContent(source.baseURL + route.path),
 		getContent,
 		source,
-		isFillMode
+		isFillMode,
+		...other,
 	})
 	return results.map(({ id: resultId, title, blocks, tags: resultTags, imagePath }) => {
 		const id = snake(source.idPrefix, ...(route.idPrefix ?? []), resultId)

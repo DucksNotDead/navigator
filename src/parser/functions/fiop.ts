@@ -41,8 +41,8 @@ export const fiopFn: ParserFunction = async ({ html, getContent, source, isFillM
 		const innerContent = await getContent(href)
 		const textBlocks = innerContent
 			.querySelectorAll(selectors.text)
-			.filter(el => el.rawText.trim().length)
-			.map(el => el.rawText);
+			.map(el => el.rawText)
+			.filter(el => el.trim().length)
 		const description = text(keys.title.length, textBlocks)
 
 		items.push({
