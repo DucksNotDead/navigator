@@ -3,10 +3,11 @@ import {rnfFn} from "./functions/rnf";
 import {Tags} from "../shared/tags";
 import {fiopFn} from "./functions/fiop";
 import {atrNewsFn} from "./functions/atr/atr-news";
+import {atrContestsFn} from "./functions/atr/atr-contests";
+import {minobrFn} from "./functions/minobr";
 
 export const sources: ParserSource[] = [
 	{
-		disabled: true,
 		name: 'Российский научный фонд',
 		baseURL: 'https://rscf.ru',
 		idPrefix: 'РНФ',
@@ -16,7 +17,6 @@ export const sources: ParserSource[] = [
 		logo: 'rnf-logo.png',
 	},
 	{
-		disabled: true,
 		name: 'Фонд инфраструктурных и образовательных программ',
 		baseURL: 'https://fiop.site',
 		idPrefix: 'ФИОП',
@@ -31,9 +31,18 @@ export const sources: ParserSource[] = [
 		baseURL: 'https://atr.gov.ru',
 		idPrefix: 'АТР',
 		routes: [
-			// { path: '/', fn: atrContestsFn, tag: Tags.Grants, idPrefix: Tags.Grants },
+			{ path: '/', fn: atrContestsFn, tag: Tags.Grants, idPrefix: Tags.Grants },
 			{ path: '/news', fn: atrNewsFn, tag: Tags.News, idPrefix: Tags.News },
 		],
 		logo: 'atr-logo.png',
+	},
+	{
+		name: 'Министерство науки и высшего образования РФ',
+		baseURL: 'https://minobrnauki.gov.ru',
+		idPrefix: 'МИНОБР',
+		routes: [
+			{ path: '/grants/grants', fn: minobrFn, tag: Tags.Grants, idPrefix: Tags.Grants },
+		],
+		logo: 'minobr-logo.png',
 	},
 ]

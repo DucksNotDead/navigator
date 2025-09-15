@@ -14,7 +14,6 @@ export function main() {
 				const results = await parse({ ...emulateCallbackArguments, source: { ...source, baseURL }, route, isFillMode: false });
 				let index = 0;
 				for (const result of results) {
-					console.log({ result })
 					const image = result.imagePath? result.imagePath : `${__dirname}/../../assets/${source.logo}`
 					await send(
 						result,
