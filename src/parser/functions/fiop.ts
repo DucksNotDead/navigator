@@ -1,5 +1,5 @@
 import {ParserFunction} from "../model";
-import {link, text} from "../utils";
+import {link, normalizedDate, text} from "../utils";
 
 interface Item {
 	title: string;
@@ -7,13 +7,14 @@ interface Item {
 	imageURL: string | undefined;
 	href: string;
 	tag: string;
+	fromDate: string;
 }
 
 const selectors = {
 	image: '.newsCard__image',
 	wrapper: '.newsCard__wrap',
 	title: '.newsCard__head',
-	date: '.newsCard__date',
+	date: '.date',
 	tag: '.newsCard__type-caption',
 	source: '.newsCard__source',
 	text: '.formatedText:first-child p:not([class])'
@@ -39,6 +40,11 @@ export const fiopFn: ParserFunction = async ({ html, getContent, source, isFillM
 		const imageURL =  source.baseURL + imageEl.querySelector('span')?.attributes['style']?.split('url(')[1]?.replace(');', '')
 
 		const innerContent = await getContent(href)
+
+		const date = innerContent.querySelector(selectors.date)?.rawText
+		if (!date) continue
+		const fromDate = normalizedDate(date)
+
 		const textBlocks = innerContent
 			.querySelectorAll(selectors.text)
 			.map(el => el.rawText)
@@ -51,16 +57,18 @@ export const fiopFn: ParserFunction = async ({ html, getContent, source, isFillM
 			description,
 			href,
 			imageURL,
+			fromDate,
 		})
 	}
 
-	return items.reverse().map(({ title, tag, href, description, imageURL }) => {
+	return items.reverse().map(({ title, tag, href, description, imageURL, fromDate }) => {
 		const ids = href.split('/').filter(path => path.length)
 		const id = ids[ids.length - 1]!
 
 		return {
 			id,
 			title,
+			fromDate,
 			blocks: [
 				description,
 				link('Посмотреть полностью', href)

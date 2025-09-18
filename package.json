@@ -6,7 +6,7 @@
     "rebuild": "rm -r -f dist && npx tsc",
     "prod": "npm run rebuild && pm2 restart ecosystem.config.js && pm2 logs app",
     "dev": "npm run rebuild && node dist/app/scripts/dev.js",
-    "clear": "npm run rebuild && node dist/app/scripts/clear.js",
+    "clear": "npm run rebuild && node dist/app/scripts/clear.js && rm -r -f messages.db",
     "fill": "npm run rebuild && node dist/app/scripts/fill.js",
     "scheduler-test": "npm run rebuild && node dist/app/scripts/schedule-test.js"
   },

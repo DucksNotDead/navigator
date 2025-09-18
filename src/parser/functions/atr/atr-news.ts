@@ -1,5 +1,5 @@
 import {ParserFunction, ParserFunctionResult} from "../../model";
-import {link, text} from "../../utils";
+import {link, normalizedDate, text} from "../../utils";
 
 interface Item {
 	link: string;
@@ -42,9 +42,11 @@ export const atrNewsFn: ParserFunction = async ({ page, getContent }) => {
 
 		const title = content.querySelector(selectors.title)?.rawText
 		const cover = content.querySelector(selectors.cover)?.getAttribute('src')
-		const date = content.querySelector(selectors.date)?.rawText
+		let date = content.querySelector(selectors.date)?.rawText
 
 		if (!title || !cover || !date) continue;
+
+		date = normalizedDate(date)
 
 		const textBlocks = content.querySelector(selectors.text)!.rawText.split('\n')
 			.filter(block => block?.trim().length)
@@ -64,6 +66,7 @@ export const atrNewsFn: ParserFunction = async ({ page, getContent }) => {
 				link('Посмотреть полностью', itemLink)
 			],
 			imagePath: cover,
+			fromDate: date,
 		}
 	});
 }

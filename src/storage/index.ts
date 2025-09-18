@@ -10,11 +10,11 @@ class StorageLike {
 		this.initDb().then()
 	}
 
-	async saveMessage({ id, telegramID, content }: Message) {
+	async saveMessage({ id, telegramID, content, fromDate }: Message) {
 		await this.checkDb()
 		await this.db?.run(
-			`INSERT OR REPLACE INTO ${this.tableName} (id, telegramID, content) VALUES (?, ?, ?)`,
-			[id, telegramID, content]
+			`INSERT OR REPLACE INTO ${this.tableName} (id, telegramID, content, fromDate) VALUES (?, ?, ?, ?)`,
+			[id, telegramID, content, fromDate]
 		);
 	}
 
@@ -31,13 +31,12 @@ class StorageLike {
 		return this.db?.all(`SELECT * FROM ${this.tableName}`) ?? [];
 	}
 
-	async clearTable(): Promise<number[]> {
+	async clearTable(): Promise<void> {
 		await this.checkDb()
 		const messages = await this.findAll();
 		for (const message of messages) {
 			await this.removeMessage(message.id);
 		}
-		return messages.map(message => message.telegramID)
 	}
 
 	private async initDb() {
@@ -50,7 +49,8 @@ class StorageLike {
     CREATE TABLE IF NOT EXISTS ${this.tableName} (
       id TEXT PRIMARY KEY,
       telegramID NUMBER,
-      content TEXT
+      content TEXT,
+      fromDate TEXT
     )
   `);
 

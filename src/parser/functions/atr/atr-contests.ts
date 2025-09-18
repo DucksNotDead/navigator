@@ -1,5 +1,5 @@
 import {ParserFunction, ParserFunctionResult} from "../../model";
-import {isNotFutureDate, li, lowerFirstIfNotUppercase, normalize} from "../../utils";
+import {isNotFutureDate, li, lowerFirstIfNotUppercase, normalize, normalizedDate} from "../../utils";
 
 interface RootLink {
 	title: string;
@@ -60,7 +60,11 @@ export const atrContestsFn: ParserFunction = async ({ html, getContent, page, pa
 			if (!titleText || !cost) continue;
 			const title = 'Конкурсный отбор на разработку ' + lowerFirstIfNotUppercase(titleText);
 			const params: Item['params'] = productEl.querySelectorAll(selectors.product.other).map(el => {
-				const [key, value] = el.rawText.split(':') as [string, string]
+				let [key, value] = el.rawText.split(':') as [string, string]
+				if (key === 'Начало приема заявок') {
+					console.log({value, normalize: normalizedDate(value)})
+					value = normalizedDate(value)
+				}
 				return { key, value }
 			})
 			const endValue = params.find(p => p.key === 'Окончание приема заявок')
@@ -69,15 +73,20 @@ export const atrContestsFn: ParserFunction = async ({ html, getContent, page, pa
 		}
 	}
 
-	return items.reverse().map<ParserFunctionResult>(({ id, title, cost, params, idPrefix }) => {
+	return items.map<ParserFunctionResult|null>(({ id, title, cost, params, idPrefix }) => {
+		const fromDate = params.find(({ key }) => key === 'Начало приема заявок')?.value
+		if (!fromDate) {
+			return null
+		}
 		return {
 			id,
 			title,
 			idPrefix,
+			fromDate,
 			blocks: [
 				li('Сумма гранта', normalize(cost)),
 				params.map(({ key, value }) => li(key, value))
 			]
 		}
-	})
+	}).filter(i => i !== null)
 }

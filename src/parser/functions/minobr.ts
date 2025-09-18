@@ -1,5 +1,5 @@
 import {ParserFunction} from "../model";
-import {link, text} from "../utils";
+import {link, normalizedDate, text} from "../utils";
 
 interface Card {
 	title: string;
@@ -38,7 +38,7 @@ export const minobrFn: ParserFunction = async ({ html, getContent, source: { bas
 		const content = await getContent(url)
 		const id = card?.url.split('ELEMENT_ID=')[1]?.split('&')[0]!
 
-		const date = content.querySelector(selectors.date)?.rawText!
+		const date = normalizedDate(content.querySelector(selectors.date)?.rawText!)
 		const textBlocks = content.querySelectorAll(selectors.body)
 			.map(el => el.rawText)
 			.filter(el => el.trim().length)
@@ -57,5 +57,6 @@ export const minobrFn: ParserFunction = async ({ html, getContent, source: { bas
 			link('Посмотреть полностью', url)
 		],
 		imagePath: cover,
+		fromDate: date,
 	}))
 }

@@ -27,7 +27,7 @@ export const sources: ParserSource[] = [
 		logo: 'fiop-logo.svg',
 	},
 	{
-		name: 'АНО Агентство по технологическому развитию',
+		name: 'Агентство по технологическому развитию',
 		baseURL: 'https://atr.gov.ru',
 		idPrefix: 'АТР',
 		routes: [

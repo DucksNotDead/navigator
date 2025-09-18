@@ -1,5 +1,5 @@
-export interface Message {
-	id: string;
+import {ParserResult} from "../parser/model";
+
+export interface Message extends ParserResult {
 	telegramID: number;
-	content: string;
 }

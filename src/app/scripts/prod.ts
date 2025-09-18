@@ -4,8 +4,8 @@ import {main} from "../main";
 
 console.log('APP STARTS')
 
-main()
+void main()
 
-schedule(appConfig.parsingTimeCron, () => {
-	main()
+schedule(appConfig.parsingTimeCron, async () => {
+	await main()
 })

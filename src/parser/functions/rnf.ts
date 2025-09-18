@@ -1,5 +1,5 @@
 import {Link, ParserFunction} from "../model";
-import {comma, li, link, pureText} from "../utils";
+import {comma, currentDate, li, link, pureText} from "../utils";
 
 const selectors = {
 	row: '.classification-table-row',
@@ -86,10 +86,12 @@ export const rnfFn: ParserFunction = async ({ html, source, isFillMode }) => {
 		return index
 	}).filter(index => index !== null)
 
-	return values.reverse().map((value, valueIndex) => {
+	return values.map((value, valueIndex) => {
+		const fromDate = value[submitIndex!]?.split(' ').find(s => s.includes('.')) ?? currentDate()
 		return {
 			id: value[idIndex!]!,
 			title: value[nameIndex!]!,
+			fromDate,
 			blocks: [
 				freeIndexes.map(index => {
 					const key = names[index]!

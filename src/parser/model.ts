@@ -2,10 +2,13 @@ import {HTMLElement} from "node-html-parser";
 import {EmulateCallbackArguments} from "../emulator/model";
 import {Page} from "@playwright/test";
 
+export type DateCollage = [number, number, number]
+
 export interface ParserResult {
 	id: string;
 	content: string;
 	imagePath?: string | undefined;
+	fromDate: string;
 }
 
 export interface ParserSourceBase {
