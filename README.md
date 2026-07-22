@@ -48,8 +48,6 @@ cp .env.example .env
 | `TELEGRAM_BOT_TOKEN` | Токен Telegram-бота |
 | `TELEGRAM_CHANNEL_ID` | ID канала для публикации |
 
-Файл `.env` уже в `.gitignore` и не должен попадать в репозиторий.
-
 ## Запуск
 
 ```bash
